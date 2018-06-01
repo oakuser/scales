@@ -7,9 +7,12 @@ $planogram = [
     ['product_id' => 3, 'weight' => 510, 'qty' => 5],
 ];
 
+$scalesWeight = 1200;
+
 $scales = new Scales($planogram);
 
-/*$result = $scales->parseWeight(1200);
+echo "Serching products for weight $scalesWeight ...\n";
+$result = $scales->parseWeight($scalesWeight);
 
 foreach ($result as $row) {
     $w = 0;
@@ -19,8 +22,12 @@ foreach ($result as $row) {
     }
 
     echo implode('', $row) . ' ' . $w . "\n";
-}*/
+}
+echo "Done, " . count($result) . " products\n";
 
+echo "\n";
+
+echo "Testing planogram ...\n";
 $result = $scales->testPlanogram();
 $qtyVariants = 0;
 foreach ($result as $weight => $variants) {
@@ -29,4 +36,4 @@ foreach ($result as $weight => $variants) {
         $qtyVariants++;
     }
 }
-echo $qtyVariants . " variants\n";
+echo "Done, " . $qtyVariants . " wrong variants\n";

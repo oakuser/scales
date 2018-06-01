@@ -50,6 +50,8 @@ Class Scales
             }
         }
 
+        $result = $this->sortVariantsByProductsQty($result);
+
         return $result;
     }
 
@@ -159,5 +161,39 @@ Class Scales
         }
 
         return $weights;
+    }
+
+    /**
+     * Сортировка вариантов по кол-ву товаров
+     * Наиболее вероятен вариант с меньшим ассортиментом и меньшим кол-вом взятого товара
+     */
+    protected function sortVariantsByProductsQty($variants)
+    {
+        $result = $variantsByQty = [];
+
+        foreach ($variants as $variant) {
+            $qty = array_sum($variant);
+
+            $assortmentQty = 0;
+            foreach ($variant as $qty) {
+                if ($qty) {
+                    $assortmentQty++;
+                }
+            }
+
+            $variantsByQty[$assortmentQty][$qty][] = $variant;
+        }
+
+        ksort($variantsByQty);
+
+        foreach ($variantsByQty as $qtyVariants) {
+            ksort($qtyVariants);
+
+            foreach ($qtyVariants as $variants) {
+                $result = array_merge($result, $variants);
+            }
+        }
+
+        return $result;
     }
 }
